@@ -45,7 +45,7 @@ Your phones need to reach the server from anywhere, so host it somewhere with **
 | `APNS_KEY_PATH` or `APNS_KEY` | for ping | Path to (or contents of) your `.p8` APNs key. |
 | `APNS_KEY_ID` | for ping | The key's ID. |
 | `APNS_TEAM_ID` | for ping | Your Apple Developer Team ID. |
-| `APNS_BUNDLE_ID` | for ping | The app's bundle identifier, same as in `ios/project.yml`. |
+| `APNS_BUNDLE_ID` | for ping | The app's bundle identifier, as set in Xcode (Signing & Capabilities). |
 
 Without the APNs variables, "Play sound" is queued and only plays the next time the app reports in.
 
@@ -55,19 +55,17 @@ Run the server tests with `npm test`.
 
 ## 2. Build and install the app
 
-Requires a Mac with Xcode 15 or newer.
+Requires a Mac with Xcode 15 or newer. No other tools needed.
 
-```sh
-brew install xcodegen
-cd ios
-# Edit project.yml: set PRODUCT_BUNDLE_IDENTIFIER to something unique and DEVELOPMENT_TEAM to your team ID.
-xcodegen generate
-open DeviceTracker.xcodeproj
-```
+1. Open `ios/DeviceTracker.xcodeproj` in Xcode.
+2. Click the blue **DeviceTracker** project at the top of the file list, then the **Signing & Capabilities** tab.
+3. Pick your Apple ID under **Team** (add it in Xcode > Settings > Accounts if it is not listed).
+4. Change **Bundle Identifier** from `com.example.devicetracker` to something unique, such as `com.yourname.devicetracker`. Use the same value for `APNS_BUNDLE_ID` on the server.
+5. Plug in your iPhone or iPad, select it at the top of the Xcode window, and press Run (the play button). Repeat for each device.
 
-Plug in your iPhone or iPad, select it as the run destination, and press Run. Repeat for each device.
+The first time, the device may block the app. Go to Settings > General > VPN & Device Management, trust your developer certificate, and turn on Developer Mode if asked (Settings > Privacy & Security > Developer Mode).
 
-**Free Apple ID instead of a paid account:** push notifications are not available. Clear the `CODE_SIGN_ENTITLEMENTS` line in `project.yml` before `xcodegen generate`. Battery, charging and location reporting still work, but ping only works when the app next reports in, and iOS makes you reinstall the app every 7 days.
+**Free Apple ID instead of a paid account:** push notifications are not available, and signing fails with an error about the Push Notifications capability. In Signing & Capabilities, delete the **Push Notifications** and **Time Sensitive Notifications** capabilities (the trash icon next to each). Battery, charging and location reporting still work, but ping only works the next time the app reports in, and iOS makes you reinstall the app every 7 days.
 
 ## 3. Set up each device
 

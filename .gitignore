@@ -2,7 +2,6 @@ node_modules/
 server/data/
 *.p8
 .DS_Store
-ios/*.xcodeproj/
 ios/build/
 xcuserdata/
 Phone-Info-App.zip

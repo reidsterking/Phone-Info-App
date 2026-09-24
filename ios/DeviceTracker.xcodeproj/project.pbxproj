@@ -1,0 +1,285 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D7AC00000000000000000009 /* DeviceTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AC00000000000000000001 /* DeviceTrackerApp.swift */; };
+		D7AC0000000000000000000A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AC00000000000000000002 /* AppDelegate.swift */; };
+		D7AC0000000000000000000B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AC00000000000000000003 /* ContentView.swift */; };
+		D7AC0000000000000000000C /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AC00000000000000000004 /* Settings.swift */; };
+		D7AC0000000000000000000D /* DeviceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AC00000000000000000005 /* DeviceStatus.swift */; };
+		D7AC0000000000000000000E /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AC00000000000000000006 /* LocationService.swift */; };
+		D7AC0000000000000000000F /* Reporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AC00000000000000000007 /* Reporter.swift */; };
+		D7AC00000000000000000010 /* AlarmPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7AC00000000000000000008 /* AlarmPlayer.swift */; };
+		D7AC00000000000000000012 /* ping.wav in Resources */ = {isa = PBXBuildFile; fileRef = D7AC00000000000000000011 /* ping.wav */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		D7AC00000000000000000001 /* DeviceTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTrackerApp.swift; sourceTree = "<group>"; };
+		D7AC00000000000000000002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D7AC00000000000000000003 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D7AC00000000000000000004 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		D7AC00000000000000000005 /* DeviceStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceStatus.swift; sourceTree = "<group>"; };
+		D7AC00000000000000000006 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		D7AC00000000000000000007 /* Reporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reporter.swift; sourceTree = "<group>"; };
+		D7AC00000000000000000008 /* AlarmPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmPlayer.swift; sourceTree = "<group>"; };
+		D7AC00000000000000000011 /* ping.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = ping.wav; sourceTree = "<group>"; };
+		D7AC00000000000000000013 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D7AC00000000000000000014 /* DeviceTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DeviceTracker.entitlements; sourceTree = "<group>"; };
+		D7AC00000000000000000015 /* DeviceTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeviceTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D7AC0000000000000000001B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D7AC00000000000000000016 /*  */ = {
+			isa = PBXGroup;
+			children = (
+				D7AC00000000000000000017 /* DeviceTracker */,
+				D7AC00000000000000000019 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D7AC00000000000000000017 /* DeviceTracker */ = {
+			isa = PBXGroup;
+			children = (
+				D7AC00000000000000000001 /* DeviceTrackerApp.swift */,
+				D7AC00000000000000000002 /* AppDelegate.swift */,
+				D7AC00000000000000000003 /* ContentView.swift */,
+				D7AC00000000000000000004 /* Settings.swift */,
+				D7AC00000000000000000005 /* DeviceStatus.swift */,
+				D7AC00000000000000000006 /* LocationService.swift */,
+				D7AC00000000000000000007 /* Reporter.swift */,
+				D7AC00000000000000000008 /* AlarmPlayer.swift */,
+				D7AC00000000000000000018 /* Resources */,
+				D7AC00000000000000000013 /* Info.plist */,
+				D7AC00000000000000000014 /* DeviceTracker.entitlements */,
+			);
+			path = DeviceTracker;
+			sourceTree = "<group>";
+		};
+		D7AC00000000000000000018 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D7AC00000000000000000011 /* ping.wav */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D7AC00000000000000000019 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D7AC00000000000000000015 /* DeviceTracker.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D7AC0000000000000000001D /* DeviceTracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D7AC00000000000000000024 /* Build configuration list for PBXNativeTarget "DeviceTracker" */;
+			buildPhases = (
+				D7AC0000000000000000001A /* Sources */,
+				D7AC0000000000000000001B /* Frameworks */,
+				D7AC0000000000000000001C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DeviceTracker;
+			productName = DeviceTracker;
+			productReference = D7AC00000000000000000015 /* DeviceTracker.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D7AC0000000000000000001E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					D7AC0000000000000000001D = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = D7AC00000000000000000021 /* Build configuration list for PBXProject "DeviceTracker" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D7AC00000000000000000016;
+			productRefGroup = D7AC00000000000000000019 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D7AC0000000000000000001D /* DeviceTracker */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D7AC0000000000000000001C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D7AC00000000000000000012 /* ping.wav in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D7AC0000000000000000001A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D7AC00000000000000000009 /* DeviceTrackerApp.swift in Sources */,
+				D7AC0000000000000000000A /* AppDelegate.swift in Sources */,
+				D7AC0000000000000000000B /* ContentView.swift in Sources */,
+				D7AC0000000000000000000C /* Settings.swift in Sources */,
+				D7AC0000000000000000000D /* DeviceStatus.swift in Sources */,
+				D7AC0000000000000000000E /* LocationService.swift in Sources */,
+				D7AC0000000000000000000F /* Reporter.swift in Sources */,
+				D7AC00000000000000000010 /* AlarmPlayer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		D7AC0000000000000000001F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D7AC00000000000000000020 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D7AC00000000000000000022 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = DeviceTracker/DeviceTracker.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DeviceTracker/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.devicetracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D7AC00000000000000000023 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = DeviceTracker/DeviceTracker.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DeviceTracker/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.devicetracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D7AC00000000000000000021 /* Build configuration list for PBXProject "DeviceTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D7AC0000000000000000001F /* Debug */,
+				D7AC00000000000000000020 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D7AC00000000000000000024 /* Build configuration list for PBXNativeTarget "DeviceTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D7AC00000000000000000022 /* Debug */,
+				D7AC00000000000000000023 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D7AC0000000000000000001E /* Project object */;
+}
