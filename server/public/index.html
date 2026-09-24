@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Device Tracker</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  :root { --bg: #f5f5f7; --card: #fff; --text: #1d1d1f; --muted: #6e6e73; --accent: #0071e3; --ok: #1f9d55; --warn: #d97706; --bad: #dc2626; --border: #e5e5ea; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #000; --card: #1c1c1e; --text: #f5f5f7; --muted: #98989d; --accent: #0a84ff; --border: #2c2c2e; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 16px; }
+  h1 { font-size: 22px; margin: 0; }
+  main { display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 16px; padding: 0 16px 16px; }
+  @media (max-width: 800px) { main { grid-template-columns: minmax(0, 1fr); } #map { height: 50vh; } }
+  #map { min-height: 70vh; border-radius: 12px; border: 1px solid var(--border); }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px; cursor: pointer; }
+  .card.selected { outline: 2px solid var(--accent); }
+  .row { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .name { font-weight: 600; font-size: 17px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .battery { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  button, .btn { border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 13px; cursor: pointer; text-decoration: none; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.danger { color: var(--bad); }
+  #login { max-width: 360px; margin: 15vh auto; padding: 0 16px; }
+  #login input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); font: inherit; margin: 8px 0; }
+  #toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 10px 14px; border-radius: 10px; display: none; max-width: calc(100% - 32px); }
+</style>
+</head>
+<body>
+<div id="login" hidden>
+  <h1>Device Tracker</h1>
+  <p class="muted">Enter the API key you set on the server.</p>
+  <form id="loginForm"><input id="key" type="password" autocomplete="current-password" placeholder="API key" required><button class="primary" type="submit">Sign in</button></form>
+</div>
+<div id="app" hidden>
+  <header><h1>Device Tracker</h1><div><button id="reload">Reload</button> <button id="logout">Sign out</button></div></header>
+  <main><section id="list"></section><div id="map"></div></main>
+</div>
+<div id="toast"></div>
+<script>
+const KEY_STORAGE = 'deviceTrackerApiKey';
+let apiKey = null;
+try { apiKey = localStorage.getItem(KEY_STORAGE); } catch {}
+let selectedId = null;
+let map, markers = {}, trail;
+let devices = [];
+
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.style.display = 'block';
+  clearTimeout(toast.timer); toast.timer = setTimeout(() => { t.style.display = 'none'; }, 4000);
+}
+
+function ago(iso) {
+  if (!iso) return 'never';
+  const s = Math.round((Date.now() - new Date(iso)) / 1000);
+  if (s < 60) return `${s}s ago`;
+  if (s < 3600) return `${Math.round(s / 60)}m ago`;
+  if (s < 86400) return `${Math.round(s / 3600)}h ago`;
+  return `${Math.round(s / 86400)}d ago`;
+}
+
+async function api(method, path) {
+  const res = await fetch(path, { method, headers: { authorization: `Bearer ${apiKey}` } });
+  if (res.status === 401) { signOut(); throw new Error('Wrong API key'); }
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(body.error || `HTTP ${res.status}`);
+  return body;
+}
+
+function batteryText(b) {
+  if (!b || b.level == null || b.level < 0) return 'Battery unknown';
+  const state = { charging: 'Charging', full: 'Full (plugged in)', unplugged: 'Not charging' }[b.state] || 'Unknown';
+  return `${Math.round(b.level * 100)}% · ${state}${b.lowPowerMode ? ' · Low Power' : ''}`;
+}
+
+function render() {
+  const list = $('#list');
+  if (!devices.length) {
+    list.innerHTML = '<div class="card">No devices yet. Open the app on your iPhone or iPad, enter this server URL and API key, and tap "Send report now".</div>';
+    return;
+  }
+  list.innerHTML = devices.map((d) => {
+    const b = d.battery || {};
+    const color = b.level == null ? 'var(--muted)' : b.level <= 0.2 ? 'var(--bad)' : b.level <= 0.4 ? 'var(--warn)' : 'var(--ok)';
+    const loc = d.location;
+    return `<div class="card ${d.id === selectedId ? 'selected' : ''}" data-id="${esc(d.id)}">
+      <div class="row"><span class="name">${esc(d.name || 'Unnamed device')}</span><span class="battery" style="color:${color}">${esc(batteryText(b))}</span></div>
+      <div class="muted">${esc(d.model || '')} · ${esc(d.systemName || '')} ${esc(d.systemVersion || '')} · last report ${esc(ago(d.lastSeen))}${d.lastReportReason ? ` (${esc(d.lastReportReason)})` : ''}</div>
+      <div class="muted">${loc ? `Location ±${Math.round(loc.accuracy)}m, fixed ${esc(ago(loc.timestamp))}` : 'No location yet'}</div>
+      ${d.pendingCommands?.length ? `<div class="muted">Waiting to deliver: ${esc(d.pendingCommands.join(', '))}</div>` : ''}
+      <div class="actions">
+        <button class="primary" data-action="ping">Play sound</button>
+        <button data-action="refresh">Request update</button>
+        ${loc ? `<a class="btn" target="_blank" rel="noopener" href="https://maps.apple.com/?ll=${loc.latitude},${loc.longitude}&q=${encodeURIComponent(d.name || 'Device')}">Apple Maps</a>` : ''}
+        <a class="btn" target="_blank" rel="noopener" href="https://www.icloud.com/find" title="Remote lock is only possible through Apple Find My (Lost Mode)">Lock (Find My)</a>
+        <button class="danger" data-action="remove">Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+  renderMap();
+}
+
+function renderMap() {
+  if (typeof L === 'undefined') {
+    $('#map').innerHTML = '<p class="muted" style="padding:16px">Map could not load (no connection to the map library). Use the Apple Maps buttons instead.</p>';
+    return;
+  }
+  if (!map) {
+    map = L.map('map').setView([20, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
+  }
+  const seen = new Set();
+  const bounds = [];
+  for (const d of devices) {
+    if (!d.location) continue;
+    seen.add(d.id);
+    const ll = [d.location.latitude, d.location.longitude];
+    bounds.push(ll);
+    const label = `<b>${esc(d.name)}</b><br>${esc(batteryText(d.battery))}<br>±${Math.round(d.location.accuracy)}m, ${esc(ago(d.location.timestamp))}`;
+    if (markers[d.id]) {
+      markers[d.id].marker.setLatLng(ll).setPopupContent(label);
+      markers[d.id].circle.setLatLng(ll).setRadius(d.location.accuracy);
+    } else {
+      markers[d.id] = { marker: L.marker(ll).addTo(map).bindPopup(label), circle: L.circle(ll, { radius: d.location.accuracy, weight: 1 }).addTo(map) };
+    }
+  }
+  for (const id of Object.keys(markers)) {
+    if (!seen.has(id)) { markers[id].marker.remove(); markers[id].circle.remove(); delete markers[id]; }
+  }
+  if (trail) { trail.remove(); trail = null; }
+  const sel = devices.find((d) => d.id === selectedId);
+  if (sel?.history?.length > 1) trail = L.polyline(sel.history.map((p) => [p.latitude, p.longitude]), { weight: 3, opacity: 0.6 }).addTo(map);
+  if (!renderMap.fitted && bounds.length) { map.fitBounds(bounds, { maxZoom: 15, padding: [40, 40] }); renderMap.fitted = true; }
+}
+
+async function load() {
+  try {
+    const body = await api('GET', '/api/devices');
+    devices = body.devices;
+    if (!body.pushConfigured && !load.warned) { load.warned = true; toast('APNs is not configured on the server, so "Play sound" only works while the app is open.'); }
+    render();
+  } catch (e) { toast(e.message); }
+}
+
+$('#list').addEventListener('click', async (e) => {
+  const card = e.target.closest('.card[data-id]');
+  if (!card) return;
+  const id = card.dataset.id;
+  const action = e.target.dataset.action;
+  if (!action) {
+    selectedId = id;
+    const d = devices.find((x) => x.id === id);
+    render();
+    if (d?.location && map) { map.setView([d.location.latitude, d.location.longitude], 16); markers[id]?.marker.openPopup(); }
+    return;
+  }
+  e.stopPropagation();
+  try {
+    if (action === 'remove') {
+      if (!confirm('Remove this device from the dashboard? It will reappear if the app reports again.')) return;
+      await api('DELETE', `/api/devices/${encodeURIComponent(id)}`);
+      return load();
+    }
+    const r = await api('POST', `/api/devices/${encodeURIComponent(id)}/${action}`);
+    toast(r.pushed ? (action === 'ping' ? 'Ping sent.' : 'Update requested. It can take a minute, and iOS may ignore it.')
+      : `Queued, but push failed: ${r.reason || 'unknown reason'}. It will run next time the app reports.`);
+    load();
+  } catch (err) { toast(err.message); }
+});
+
+function signOut() { try { localStorage.removeItem(KEY_STORAGE); } catch {} apiKey = null; show(); }
+function show() {
+  $('#login').hidden = Boolean(apiKey);
+  $('#app').hidden = !apiKey;
+  if (apiKey) load();
+}
+$('#loginForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  apiKey = $('#key').value.trim();
+  try { localStorage.setItem(KEY_STORAGE, apiKey); } catch {}
+  show();
+});
+$('#logout').addEventListener('click', signOut);
+$('#reload').addEventListener('click', load);
+setInterval(() => { if (apiKey && !document.hidden) load(); }, 30000);
+show();
+</script>
+</body>
+</html>
