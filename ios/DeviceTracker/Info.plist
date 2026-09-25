@@ -44,6 +44,13 @@
 	<string>Your location is sent to your own Device Tracker server so you can find this device.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Allow "Always" so this device can report its location to your Device Tracker server even when the app is closed.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Lets Device Tracker reach your tracker server when it runs on a computer on your home network.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
