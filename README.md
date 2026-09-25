@@ -65,7 +65,9 @@ Requires a Mac with Xcode 15 or newer. No other tools needed.
 
 The first time, the device may block the app. Go to Settings > General > VPN & Device Management, trust your developer certificate, and turn on Developer Mode if asked (Settings > Privacy & Security > Developer Mode).
 
-**Free Apple ID instead of a paid account:** push notifications are not available, and signing fails with an error about the Push Notifications capability. In Signing & Capabilities, delete the **Push Notifications** and **Time Sensitive Notifications** capabilities (the trash icon next to each). Battery, charging and location reporting still work, but ping only works the next time the app reports in, and iOS makes you reinstall the app every 7 days.
+**Free Apple ID vs. paid developer account:** the project is set up for a free Apple ID (Personal Team) by default, so push notifications are off. Battery, charging and location reporting work, but ping only plays the next time the app reports in, and iOS makes you reinstall the app every 7 days.
+
+**Turning on push (paid account only):** in Build Settings, set **Code Signing Entitlements** to `DeviceTracker/DeviceTracker.entitlements`, then build again. That enables Push Notifications and Time Sensitive Notifications, which instant ping needs.
 
 ## 3. Set up each device
 
